@@ -10,9 +10,9 @@ import java.io.ObjectOutputStream;
 
 import org.junit.Test;
 
+import com.kriss.sample.model.Person;
 import com.kriss.util.Util;
 
-import aaa.data.Person;
 
 public class TestSerialization {
 

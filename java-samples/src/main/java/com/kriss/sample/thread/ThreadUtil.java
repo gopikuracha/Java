@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import com.kriss.learning.ClassVariablesRetriever;
+import com.kriss.sample.reflection.ClassVariablesRetriever;
 import com.kriss.util.Util;
 
 

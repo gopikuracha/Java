@@ -7,15 +7,15 @@
 	<description>Project created for Java sample code</description>
 	<dependencies>
 		<dependency>
-			<groupId>com.kriss</groupId>
-			<artifactId>all-in-one</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
 		</dependency>
 	</dependencies>
 </project>

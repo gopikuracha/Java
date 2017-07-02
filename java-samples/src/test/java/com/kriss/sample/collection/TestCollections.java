@@ -3,17 +3,28 @@ package com.kriss.sample.collection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Ignore;
 import org.junit.Test;
 
-import aaa.data.Address;
-import aaa.data.Person;
+import com.kriss.sample.collection.util.MapUtil;
+import com.kriss.sample.model.Address;
+import com.kriss.sample.model.Person;
 
-@Ignore
 public class TestCollections {
+	
+	@Test
+	public void testMapIterator() {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("Key1", "Gopi");
+		map.put("Key2", "Krishna");
+		
+		MapUtil.iterateMap(map);
+	}
 
 	@Test
 	public void testArrayList() {
