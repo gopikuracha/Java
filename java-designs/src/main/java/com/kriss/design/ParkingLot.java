@@ -27,7 +27,7 @@ public class ParkingLot {
 		return true;
 	}
 	
-	public int getNextAvailableLevel() {
+	private int getNextAvailableLevel() {
 		for(int i=0; i<levelCount; i++) {
 			if(levels[i] == null) {
 				ParkingLevel level = new ParkingLevel(levelCapacity);

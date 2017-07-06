@@ -28,7 +28,7 @@ public class ParkingLevel {
 		return true;
 	}
 	
-	public int getNextAvailableSlot() {
+	private int getNextAvailableSlot() {
 		for (int i=0; i<capacity; i++){
 			if(slots[i] == null) return i;
 		}
