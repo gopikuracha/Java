@@ -7,14 +7,13 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class JdbcDaoImplMySql {
-	// JDBC driver name
-	public static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+public class JdbcDaoImplDerby {// JDBC driver name
+	public static final String JDBC_DRIVER = "org.apache.derby.jdbc.ClientDriver";
 	
 	// Default DB values
-	public static final String DEFAULT_DB_URL = "jdbc:mysql://localhost/People";
-	public static final String DEFAULT_USER = "root";
-	public static final String DEFAULT_PASS = "Kishy646$$";
+	public static final String DEFAULT_DB_URL = "jdbc:derby://localhost/db";
+	public static final String DEFAULT_USER = "";
+	public static final String DEFAULT_PASS = "";
 	public static final String DEFAULT_SQL = "SELECT * FROM Person";
 	
 	private String url;
@@ -24,9 +23,9 @@ public class JdbcDaoImplMySql {
 	private Connection conn = null;
 	private Statement stmt = null;
 	
-	public JdbcDaoImplMySql() {}
+	public JdbcDaoImplDerby() {}
 	
-	public JdbcDaoImplMySql(String url, String userName, String password) {
+	public JdbcDaoImplDerby(String url, String userName, String password) {
 		this.url = url;
 		this.user = userName;
 		this.pswd = password;
@@ -97,9 +96,8 @@ public class JdbcDaoImplMySql {
 	}
 	
 	public static void main(String[] args) {
-		JdbcDaoImplMySql dao = new JdbcDaoImplMySql();
+		JdbcDaoImplDerby dao = new JdbcDaoImplDerby();
 		dao.connect();
-		dao.executeStatement();
+		dao.executeStatement("select * from circle");
 	}
-	
 }
