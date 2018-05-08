@@ -7,10 +7,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class JdbcDaoImplMySql {
-	// JDBC driver name
-	public static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-	
+public class JdbcDAOMySQLImpl implements JdbcDAOMySQL {
+
 	// Default DB values
 	public static final String DEFAULT_DB_URL = "jdbc:mysql://localhost/People";
 	public static final String DEFAULT_USER = "root";
@@ -21,15 +19,25 @@ public class JdbcDaoImplMySql {
 	private String user;
 	private String pswd;
 	
-	private Connection conn = null;
-	private Statement stmt = null;
+	protected Connection conn = null;
+	protected Statement stmt = null;
 	
-	public JdbcDaoImplMySql() {}
+	public JdbcDAOMySQLImpl() {}
 	
-	public JdbcDaoImplMySql(String url, String userName, String password) {
+	public JdbcDAOMySQLImpl(String url, String userName, String password) {
 		this.url = url;
 		this.user = userName;
 		this.pswd = password;
+	}
+	
+	public static void main(String[] args) {
+		JdbcDAOMySQLImpl dao = new JdbcDAOMySQLImpl();
+		try {
+			dao.connect();
+			dao.executeStatement();
+		} finally {
+			dao.closeConnection();
+		}
 	}
 	
 	public void connect() {
@@ -90,16 +98,36 @@ public class JdbcDaoImplMySql {
 			rs.close();
 		} catch(SQLException e) {
 			e.printStackTrace();
-		} finally {
-			try { if(stmt!=null) stmt.close(); } catch(SQLException se) {se.printStackTrace();}
-			try { if(conn!=null) conn.close(); } catch(SQLException se) {se.printStackTrace();}
 		}
 	}
 	
-	public static void main(String[] args) {
-		JdbcDaoImplMySql dao = new JdbcDaoImplMySql();
-		dao.connect();
-		dao.executeStatement();
+	public void closeConnection() {
+		try { if(stmt!=null) stmt.close(); } catch(SQLException se) {se.printStackTrace();}
+		try { if(conn!=null) conn.close(); } catch(SQLException se) {se.printStackTrace();}
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getPswd() {
+		return pswd;
+	}
+
+	public void setPswd(String pswd) {
+		this.pswd = pswd;
 	}
 	
 }

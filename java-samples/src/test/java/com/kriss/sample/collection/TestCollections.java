@@ -15,6 +15,7 @@ import com.kriss.sample.collection.util.MapUtil;
 import com.kriss.sample.model.Address;
 import com.kriss.sample.model.Person;
 
+@Ignore
 public class TestCollections {
 	
 	@Test

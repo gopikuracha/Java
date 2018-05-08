@@ -8,12 +8,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.kriss.sample.model.Person;
 import com.kriss.util.Util;
 
-
+@Ignore
 public class TestSerialization {
 
 	@Test

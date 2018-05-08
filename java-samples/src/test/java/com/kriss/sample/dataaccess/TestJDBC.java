@@ -8,8 +8,10 @@ import java.sql.Statement;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class TestJDBC {
 
 	static final String DB_URL = "jdbc:mysql://localhost/People";

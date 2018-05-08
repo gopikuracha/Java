@@ -3,8 +3,11 @@ package com.kriss.sample.io;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import org.junit.Ignore;
+
 import com.kriss.sample.collection.adt.Queue;
 
+@Ignore
 public class ConsoleInput {
 	
 	//TODO - Need to be re-factored
