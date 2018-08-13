@@ -2,6 +2,7 @@ package com.kriss.sample.dataaccess;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -21,6 +22,7 @@ public class JdbcDAOMySQLImpl implements JdbcDAOMySQL {
 	
 	protected Connection conn = null;
 	protected Statement stmt = null;
+	protected PreparedStatement pstmt = null;
 	
 	public JdbcDAOMySQLImpl() {}
 	
@@ -65,6 +67,12 @@ public class JdbcDAOMySQLImpl implements JdbcDAOMySQL {
 		}
 	}
 	
+	public PreparedStatement getPreparedStatement(String sql) {
+		try { if(pstmt!=null) pstmt.close(); } catch(SQLException se) {se.printStackTrace();}
+		try { pstmt = conn.prepareStatement(sql); } catch(SQLException se) {se.printStackTrace();}
+		return pstmt;
+	}
+	
 	public void executeStatement() {
 		executeStatement(null);
 	}
@@ -99,6 +107,10 @@ public class JdbcDAOMySQLImpl implements JdbcDAOMySQL {
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void closePreparedStatement() {
+		try { if(pstmt!=null) pstmt.close(); } catch(SQLException se) {se.printStackTrace();}
 	}
 	
 	public void closeConnection() {

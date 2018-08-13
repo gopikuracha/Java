@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,12 +15,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CSNADAO5 extends JdbcDAOMySQLImpl {
-	
-	// Default DB values
-	public static final String DEFAULT_DB_URL = "jdbc:mysql://vwawcrntmyp003.ctlejsd73m0w.us-east-1.rds.amazonaws.com:3306/csna";
-	public static final String DEFAULT_USER = "krishgo";
-	public static final String DEFAULT_PASS = "MxB2K!g2HK";
+/**
+ * @author krishgo
+ *
+ */
+/**
+ * @author krishgo
+ *
+ */
+public class AccsSubsFixFromVztDump extends JdbcDAOMySQLImpl {
 	
 	private List<Account> accounts = new ArrayList<Account>();
 	
@@ -31,18 +33,17 @@ public class CSNADAO5 extends JdbcDAOMySQLImpl {
 	private Writer writer1 = null;
 	private Writer writer2 = null;
 	
-	private Connection conn = null;
+	public AccsSubsFixFromVztDump() {}
 	
-	public CSNADAO5() {}
-	
-	public CSNADAO5(String url, String userName, String password) {
+	public AccsSubsFixFromVztDump(String url, String userName, String password) {
 		setUrl(url);
 		setUser(userName);
 		setPswd(password);
 	}
 	
 	public static void main(String[] args) {
-		CSNADAO5 dao = new CSNADAO5();
+		AccsSubsFixFromVztDump dao = 
+				new AccsSubsFixFromVztDump("jdbc:mysql://vwawcrntmyp003.ctlejsd73m0w.us-east-1.rds.amazonaws.com:3306/csna","krishgo","MxB2K!g2HK");
 		try {
 			dao.connectWithCredentials();
 			dao.execute();
@@ -52,7 +53,6 @@ public class CSNADAO5 extends JdbcDAOMySQLImpl {
 	}
 	
 	public void execute() {
-		connectWithCredentials();
 		System.out.println(System.currentTimeMillis());
 		getAccountsFromDump();
 		
@@ -136,11 +136,13 @@ public class CSNADAO5 extends JdbcDAOMySQLImpl {
 		}
 	}
 	
+	
+	/**
+	 * 
+	 */
 	public void getAccountsFromDump() {
-		PreparedStatement ps = null;
 		try {
-			ps = conn.prepareStatement(DAOConstants.SQL_ACC_FROM_DUMP);
-			ResultSet rs = ps.executeQuery();
+			ResultSet rs = getPreparedStatement(DAOConstants.SQL_ACC_FROM_DUMP).executeQuery();
 			while(rs.next()) {
 				Account acc = new Account();
 				acc.dumpAccNum = rs.getInt(1);
@@ -153,10 +155,8 @@ public class CSNADAO5 extends JdbcDAOMySQLImpl {
 				accounts.add(acc);
 			}
 			rs.close();
-		} catch(SQLException sqle) {
-			sqle.printStackTrace();
-		} finally {
-			try { if(ps!=null) ps.close(); } catch(SQLException se) {se.printStackTrace();}
+		} catch (SQLException se) {
+			se.printStackTrace();
 		}
 	}
 	
@@ -264,6 +264,8 @@ class Account {
 	int asuSprIdent;
 	Date asuSubsStartDate;
 	Date asuSubsEndDate;
+	
+	
 
 }
 
