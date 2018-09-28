@@ -1,4 +1,4 @@
-package com.kriss.sample.dataaccess;
+package com.kriss.sample.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
