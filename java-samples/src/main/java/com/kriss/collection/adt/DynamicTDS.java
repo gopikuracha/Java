@@ -34,16 +34,16 @@ public class DynamicTDS extends TabularDS {
 	}
 	
 	@Override
+	public Object getValue(int row, int column) {
+		int index = row*columns + column;
+		return values.get(index);
+	}
+	
+	@Override
 	public void setValue(int row, int column, Object obj) {
 		this.rows = row+1;
 		int index = row*columns + column;
 		this.values.add(index, obj);
-	}
-	
-	@Override
-	public Object getValue(int row, int column) {
-		int index = row*columns + column;
-		return values.get(index);
 	}
 
 	/**

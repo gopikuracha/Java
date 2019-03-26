@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.kriss.collection.adt.DynamicTDS;
+import com.kriss.collection.adt.ObjectTDS;
+import com.kriss.collection.adt.StaticTDS;
 
 public class ExtractMySQLData {
 	
@@ -20,7 +22,7 @@ public class ExtractMySQLData {
 	private String pswd;
 	
 	public boolean keepConnectionAlive;
-	private boolean printMetaData = true;
+	public boolean printMetaData = true;
 	public boolean printMetaDataOnce;
 	
 	protected Connection conn = null;
@@ -38,7 +40,7 @@ public class ExtractMySQLData {
 	public void connectWithCredentials() {
 		try {
 			System.out.println("Connecting to database with credentials...");
-			conn = DriverManager.getConnection(url,user,pswd);
+			if (conn == null) conn = DriverManager.getConnection(url,user,pswd);
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -77,6 +79,45 @@ public class ExtractMySQLData {
 		}
 	}
 	
+	public StaticTDS extractStaticData(String sql) {
+
+		if (sql == null) { 
+			System.out.println("Statement Cannot be null...");
+			return null;
+		}
+		connectWithCredentials();
+		StaticTDS tds = null;
+		try {
+			System.out.println("Creating statement...");
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			ResultSetMetaData metaData = rs.getMetaData();
+			int columnCount = metaData.getColumnCount();
+			
+			if (printMetaData) {
+				printResultSetMetaData(metaData, columnCount);
+				if (printMetaDataOnce) printMetaData = false;
+			}
+			
+			tds = new StaticTDS(1888, columnCount, false);
+			
+			int row = -1;
+			while(rs.next()){
+				row++;
+				for (int i=1; i<=columnCount; i++) {
+					tds.setValue(row, i-1, rs.getObject(i));
+				}
+			}
+			rs.close();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeResources();
+		}
+		return tds;
+	
+	}
 
 	public DynamicTDS extractData(String sql) {
 		if (sql == null) { 
@@ -93,7 +134,10 @@ public class ExtractMySQLData {
 			ResultSetMetaData metaData = rs.getMetaData();
 			int columnCount = metaData.getColumnCount();
 			
-			printResultSetMetaData(metaData, columnCount);
+			if (printMetaData) {
+				printResultSetMetaData(metaData, columnCount);
+				if (printMetaDataOnce) printMetaData = false;
+			}
 			
 			tds = new DynamicTDS(columnCount, true);
 			
@@ -102,6 +146,44 @@ public class ExtractMySQLData {
 				row++;
 				for (int i=1; i<=columnCount; i++) {
 					tds.setValue(row, i-1, rs.getObject(i));
+				}
+			}
+			rs.close();
+		} catch(SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeResources();
+		}
+		return tds;
+	}
+	
+	public <T> ObjectTDS<T> extractObjectData(T obj, String sql) {
+		if (sql == null) { 
+			System.out.println("Statement Cannot be null...");
+			return null;
+		}
+		connectWithCredentials();
+		ObjectTDS<T> tds = null;
+		try {
+			System.out.println("Creating statement...");
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			ResultSetMetaData metaData = rs.getMetaData();
+			int columnCount = metaData.getColumnCount();
+			
+			if (printMetaData) {
+				printResultSetMetaData(metaData, columnCount);
+				if (printMetaDataOnce) printMetaData = false;
+			}
+			
+			tds = new ObjectTDS<T>(obj);
+			
+			int row = -1;
+			while(rs.next()){
+				row++;
+				for (int i=1; i<=columnCount; i++) {
+					//tds.setValue(row, i-1, rs.getObject(i));
 				}
 			}
 			rs.close();

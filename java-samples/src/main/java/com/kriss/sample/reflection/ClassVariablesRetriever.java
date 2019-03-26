@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+
 public class ClassVariablesRetriever {
 	
 	public static List<String> printFields(Object obj, boolean print) throws Exception {
@@ -127,23 +128,34 @@ public class ClassVariablesRetriever {
 	}
 	
 	private static Map<String, String> printMethodsAndValues(Class<?> cls, Object obj, boolean print, boolean split, boolean logDebug, boolean logError) {
+		if (obj == null) {
+			if(logDebug) System.out.println("Null Object passed");
+			return null;
+		}
 		if(logDebug) System.out.println("------ Inside Print Methods and Values -------------------------------------------------");
-		Map<String, String> map = null;
+		if (print) {
+			System.out.println();
+			System.out.println("---------------------- Start " + cls.toString() + " ----------");
+		}
+		Map<String, String> map = new HashMap<String, String>();
 		try {
-			map = new HashMap<String, String>();
 		    Method[] methods = cls.getDeclaredMethods();
 		    for(Method method : methods) {
 		    	String name = null;
+		    	String field = null;
 		    	try {
 		    		name = method.getName();
+			        Object methodValue = null;
 			        String value = null;
 			        if (split) {
 			        	String[] names = StringUtils.splitByCharacterTypeCamelCase(name);
-			        	name = StringUtils.join(names, " ");
+			        	names[0] = ""; // to remove get from the names list
+			        	field = StringUtils.join(names, " ");
 			        }
-			        if(obj != null && name.contains("get")) value = method.invoke(obj, (Object[])null).toString();
-			        if(print && value != null ) {
-			        	System.out.println(name + " | " + value);
+			        if(obj != null && name.contains("get")) methodValue = method.invoke(obj, (Object[])null);
+			        if(methodValue != null) value = methodValue.toString();
+			        if(print && methodValue != null ) {
+			        	System.out.println("|" + field + ": " + value);
 			        }
 			        map.put(name, value);
 		    	} catch (InvocationTargetException ite) {
@@ -154,7 +166,7 @@ public class ClassVariablesRetriever {
 		    		if(logError) System.out.println(name + " | " + ie.getMessage());
 		    	} catch (Exception e) {
 		    		if(logError) {
-		    			System.out.println(name);
+		    			System.out.println("Error while retrieving the value of " + name);
 		    			e.printStackTrace();
 		    		}
 		    	}
@@ -162,6 +174,7 @@ public class ClassVariablesRetriever {
 		} catch (SecurityException se) {
 			if(logError) System.out.println(se.getMessage());
 		}
+		if (print) System.out.println("---------------------- End " + cls.toString() + " ----------");
 	    if(logDebug) System.out.println("------ Exiting Print Methods and Values -------------------------------------------------");
 	    return map;
 	}
