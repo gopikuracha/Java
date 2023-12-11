@@ -6,6 +6,7 @@ public class Machine extends MachineComponent {
 	
 	private boolean isUp;
 	private boolean stopped;
+	private boolean temp;
 	
 	private Set<Owner> owners;
 	
